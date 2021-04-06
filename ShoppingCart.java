@@ -31,6 +31,11 @@ public class ShoppingCart {
         int money = userWallet.getBalance();
         int finalMoney = money - price;
         System.out.println("You bought : " + product + ". The price is : " + price);
+        try {
+            Thread.sleep(10000);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
         userWallet.setBalance(finalMoney);
     }
 
