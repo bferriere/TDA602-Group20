@@ -54,6 +54,11 @@ public class ShoppingCart {
         while(!product.equals("quit")) {
 
             if(enoughMoney(product,wallet)){                    //Check if there is enough money
+                try {
+                    Thread.sleep(10000);
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
                 payArticle(product,wallet);                     //Withdraw the price of the product from wallet 
                 addArticle(product,pocket);                     //Add name product to the pocket
                 System.out.println("Your balance is now :" + getNewBalance(wallet));      //Print new balance
