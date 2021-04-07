@@ -50,20 +50,22 @@ public class Wallet {
 
 
     //Added a safe wallet withdrawal method with lock protection
-    public void safeWithdraw(int valueToWithdraw) throws Exception {
+    public boolean safeWithdraw(int valueToWithdraw) throws Exception {
           FileLock lock = file.getChannel().lock();
 	  int Curbalance = getBalance();
 	  try {
 	  if (Curbalance >= valueToWithdraw) {
 	     this.setBalance(Curbalance - valueToWithdraw);
 	     lock.release();
+	     return true;
 	  } else {
 	      lock.release();
 	      throw new Exception("Insufficient balance");
-	  } 
+	     } 
 	  } catch (Exception e) {
 	      System.err.println(e);
 	  }
+	  return false;
     }
 
     /**
