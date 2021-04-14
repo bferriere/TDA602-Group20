@@ -16,8 +16,14 @@ public class ShoppingCart {
     }
 
     private static boolean enoughMoney(String product, Wallet userWallet) throws IOException, Exception{
-        int price = Store.getProductPrice(product);
-        int money = userWallet.getBalance();
+        /********************************************************************************************
+        * Inputs : Name of the product ; Wallet of the user
+        * Output : Boolean
+        * Description : Compare the price of the product the user wants to buy with its balance. 
+        * Returns true if user has enough money, returns false otherwise.
+        *********************************************************************************************/
+        int price = Store.getProductPrice(product); // Get the price of the product
+        int money = userWallet.getBalance();        // Get balance of user 
         if (price>money){
             System.out.println("Not enough money in your balance ! Exiting...");
             return false;
@@ -27,19 +33,30 @@ public class ShoppingCart {
     }
 
     private static void payArticle(String product, Wallet userWallet) throws IOException, Exception{
-        int price = Store.getProductPrice(product);
-        int money = userWallet.getBalance();
-        int finalMoney = money - price;
+        /********************************************************************************************
+        * Inputs : Name of the product ; Wallet of the user
+        * Output : None
+        * Description : Substract the price of the product to the current balance of the user. 
+        * Set the new balance as the current balance of the user.
+        *********************************************************************************************/
+        int price = Store.getProductPrice(product);                                     // Get the price of the chosen product
+        int money = userWallet.getBalance();                                            // Get the balance of the user
+        int finalMoney = money - price;                                                 // Set a temp variable equals to the balance after payment
         System.out.println("You bought : " + product + ". The price is : " + price);
         try {
-            Thread.sleep(10000);
+            Thread.sleep(10000);                                                        // Add a timer to make exploit easier
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-        userWallet.setBalance(finalMoney);
+        userWallet.setBalance(finalMoney);                                              // Set the balance of user 
     }
 
     public static void addArticle(String product, Pocket userPocket) throws Exception{
+        /********************************************************************************************
+        * Inputs : Name of the product ; Pocket of the user
+        * Output : None
+        * Description : Add article to the pocket of user
+        *********************************************************************************************/
         userPocket.addProduct(product);
     }
 
@@ -58,28 +75,14 @@ public class ShoppingCart {
 
         while(!product.equals("quit")) {
 
-            if(enoughMoney(product,wallet)){                    //Check if there is enough money
-                try {
-                    Thread.sleep(10000);
-                } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-                payArticle(product,wallet);                     //Withdraw the price of the product from wallet 
-                addArticle(product,pocket);                     //Add name product to the pocket
-                System.out.println("Your balance is now :" + getNewBalance(wallet));      //Print new balance
+            if(enoughMoney(product,wallet)){                                                //Check if there is enough money
+                payArticle(product,wallet);                                                 //Withdraw the price of the product from wallet 
+                addArticle(product,pocket);                                                 //Add name product to the pocket
+                System.out.println("Your balance is now :" + getNewBalance(wallet));        //Print new balance
             }
             else {
                 break;
             }
-
-            
-            /* TODO:
-               - check if the amount of credits is enough, if not stop the execution.
-               - otherwise, withdraw the price of the product from the wallet.
-               - add the name of the product to the pocket file.
-               - print the new balance.
-            */
-
             // Just to print everything again...
             print(wallet, pocket);
             product = scan(scanner);
