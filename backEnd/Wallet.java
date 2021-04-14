@@ -2,6 +2,7 @@ package backEnd;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.channels.FileLock;
 
 public class Wallet {
     /**
@@ -28,6 +29,14 @@ public class Wallet {
 	return Integer.parseInt(this.file.readLine());
     }
 
+    //Enhanced getbalance method with lock protection 
+    public int getBalanceSafeWithdrawal() throws IOException {
+       FileLock lock = file.getChannel().lock();
+       this.file.seek(0);
+       lock.release();
+       return Integer.parseInt(this.file.readLine());
+      }
+
     /**
      * Sets a new balance in the wallet
      *
@@ -37,6 +46,31 @@ public class Wallet {
 	this.file.setLength(0);
 	String str = Integer.valueOf(newBalance).toString()+'\n'; 
 	this.file.writeBytes(str); 
+    }
+
+
+    //Added a safe wallet withdrawal method with lock protection
+    public boolean safeWithdraw(int valueToWithdraw) throws Exception {
+          FileLock lock = file.getChannel().lock();
+	  int Curbalance = getBalance();
+	  try {
+	  if (Curbalance >= valueToWithdraw) {
+        try {
+            Thread.sleep(10000);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+	     this.setBalance(Curbalance - valueToWithdraw);
+	     lock.release();
+	     return true;
+	  } else {
+	      lock.release();
+	      throw new Exception("Insufficient balance");
+	     } 
+	  } catch (Exception e) {
+	      System.err.println(e);
+	  }
+	  return false;
     }
 
     /**

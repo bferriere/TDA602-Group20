@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.nio.channels.FileLock;
 
 
 public class Pocket {
@@ -30,6 +31,18 @@ public class Pocket {
         this.file.seek(this.file.length());
         this.file.writeBytes(product+'\n'); 
     }
+   
+   //Adding Produts safely
+   public void addProductSafe(String product) throws Exception {
+     try {
+      FileLock lock = file.getChannel().lock();
+      System.out.println("Product bought:  " + product);
+      this.addProduct(product);
+      lock.release();
+     } catch (IllegalArgumentException e) {
+	 System.err.println(e);
+     }
+   }
 
     /**
      * Generates a string representation of the pocket
