@@ -60,11 +60,11 @@ public class ShoppingCart {
 
            //if(enoughMoney(product,wallet)){                    //Check if there is enough money
 	      if(wallet.safeWithdraw(Store.getProductPrice(product))){
-                try {
-                    Thread.sleep(10000);
-                } catch(InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
+               // try {
+                 //   Thread.sleep(10000);
+               // } catch(InterruptedException ex) {
+                 //   Thread.currentThread().interrupt();
+               // }
                 //payArticle(product,wallet);                     //Withdraw the price of the product from wallet 
                 //addArticle(product,pocket);                     //Add name product to the pocket
 		pocket.addProductSafe(product);

@@ -55,12 +55,7 @@ public class Wallet {
 	  int Curbalance = getBalance();
 	  try {
 	  if (Curbalance >= valueToWithdraw) {
-        try {
-            Thread.sleep(10000);
-        } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-	     this.setBalance(Curbalance - valueToWithdraw);
+       	     this.setBalance(Curbalance - valueToWithdraw);
 	     lock.release();
 	     return true;
 	  } else {
